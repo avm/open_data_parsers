@@ -1,5 +1,7 @@
 from BeautifulSoup import BeautifulSoup as bs
 import urllib2
+import os.path
+import hashlib
 import simplejson as json
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -9,10 +11,22 @@ portalBase = 'http://webportalsrv.gost.ru'
 output = 'committees.json'
 
 def get_url(url):
-    u = urllib2.urlopen(url)
+    hash = hashlib.sha1(url).hexdigest()
+    hashfile = os.path.join('cache', hash)
+    try:
+        u = file(hashfile)
+        cached = True
+    except IOError:
+        u = urllib2.urlopen(url)
+        cached = False
     body = u.read()
     u.close()
     logging.info('fetched url: %s' % url)
+    if not cached:
+        try:
+            file(hashfile, 'w').write(body)
+        except IOError:
+            pass
     return body
 
 def get_soup(url):

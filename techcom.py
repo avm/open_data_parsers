@@ -25,21 +25,19 @@ listUrl = homepage.html.body.find('iframe')['src']
 # to browse through pages by adding '?Start=X' to the URL.
 # (I noticed this in a wireshark capture.)
 
-lastCommittee = 0
 committees = []
 
 while True:
-    if lastCommittee == 0:
+    if len(committees) == 0:
         listframe = get_soup(listUrl)
     else:
-        listframe = get_soup(listUrl + '&Start=%d' % lastCommittee)
+        listframe = get_soup(listUrl +
+                '&Start=%d' % (len(committees) - 1))
     gotNew = False
     for tr in listframe.findAll('tr'):
-        if tr.a and tr.a.string.isdigit():
+        if not tr.tr and tr.a and tr.a.string.isdigit():
+            gotNew = True
             number = int(tr.a.string)
-            if number > lastCommittee:
-                gotNew = True
-                lastCommittee = number
             name = tr.span.string
             url = tr.a['href']
             if url.startswith('/'):

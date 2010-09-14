@@ -100,7 +100,10 @@ def extractTables(node):
         tables.append((header, contents))
     return tables
 
+i = 0
 for c in committees:
+    logging.info('%d/%d complete' % (i, len(committees)))
+    i += 1
     attributes = {}
     c['attributes'] = attributes
     soup = get_soup(c['url'])

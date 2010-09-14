@@ -116,7 +116,7 @@ for c in committees:
             u"Соответствующая международная организация по стандартизации"):
             value = extractTables(valueTd)
         else:
-            value = ''.join(valueTd.findAll(text=True))
+            value = flatText(valueTd)
         if name == u"№ приказа":
             value = value.split('\n')
         attributes[name] = value

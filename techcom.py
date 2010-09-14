@@ -121,6 +121,7 @@ for c in committees:
             value = value.split('\n')
         attributes[name] = value
 
-json.dump(committees, file('output', 'w'))
+s = json.dumps(committees, indent=4, ensure_ascii=False)
+file(output, 'w').write(s.encode('utf-8'))
 
 # vim: set et ts=4 sw=4 :

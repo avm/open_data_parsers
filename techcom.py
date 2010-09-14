@@ -77,7 +77,10 @@ except IOError:
     json.dump(committees, cachefile('committees', 'w'))
 
 def flatText(node):
-    return ''.join(node.findAll(text=True)).strip()
+    text = ''.join(node.findAll(text=True)).strip()
+    while text.endswith('&nbsp;'):
+        text = text[:-6].rstrip()
+    return text
 
 def tableToTuples(table):
     rows = []
@@ -103,7 +106,7 @@ for c in committees:
     soup = get_soup(c['url'])
     for tr in soup.table.findAll('tr', recursive=False):
         nameTd, valueTd = tr.findAll('td', recursive = False)
-        name = nameTd.font.string
+        name = flatText(nameTd)
         assert name
         if name in (
             u"Область деятельности ТК",

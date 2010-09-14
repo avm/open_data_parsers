@@ -80,7 +80,7 @@ def flatText(node):
     text = ''.join(node.findAll(text=True)).strip()
     while text.endswith('&nbsp;'):
         text = text[:-6].rstrip()
-    return text
+    return text.replace('&quot;', '"'
 
 def tableToTuples(table):
     rows = []
